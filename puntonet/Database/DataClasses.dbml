@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="DeliveryMacana" Class="DataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=200.50.168.215;Initial Catalog=DeliveryMacana;Persist Security Info=True;User ID=MacanaSoftware" SettingsObjectName="Database.Properties.Settings" SettingsPropertyName="DeliveryMacanaConnectionStringCloud" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Clientes" Member="Clientes">
+    <Type Name="Cliente">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Nombre" Type="System.String" DbType="NChar(30)" CanBeNull="true" />
+      <Column Name="Apellido" Type="System.String" DbType="NChar(30)" CanBeNull="true" />
+      <Column Name="Direccion" Type="System.String" DbType="NChar(30)" CanBeNull="true" />
+      <Column Name="Telefono" Type="System.String" DbType="NChar(30)" CanBeNull="true" />
+      <Association Name="Cliente_Pedido" Member="Pedidos" ThisKey="Id" OtherKey="Cliente_Id" Type="Pedido" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Caja" Member="Caja">
+    <Type Name="Caja">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Monto_Apertura" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Fecha_Apertura" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Monto_Cierre" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Fecha_Cierre" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Estado" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Saldo" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="EfectivoCaja" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WebConf" Member="WebConf">
+    <Type Name="WebConf">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="NombreComercial" Type="System.String" DbType="NChar(80)" CanBeNull="true" />
+      <Column Name="TelefonoContacto" Type="System.String" DbType="NChar(80)" CanBeNull="true" />
+      <Column Name="Domicilio" Type="System.String" DbType="NChar(80)" CanBeNull="true" />
+      <Column Name="HorarioAtencion" Type="System.String" DbType="NChar(80)" CanBeNull="true" />
+      <Column Name="Descripcion" Type="System.String" DbType="NChar(100)" CanBeNull="true" />
+      <Column Name="PublicarCatalago" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Estados_Pedidos" Member="Estados_Pedidos">
+    <Type Name="Estados_Pedido">
+      <Column Name="Estado_Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Descripcion" Type="System.String" DbType="NChar(20) NOT NULL" CanBeNull="false" />
+      <Association Name="Estados_Pedido_Fechas_Estados_Pedido" Member="Fechas_Estados_Pedidos" ThisKey="Estado_Id" OtherKey="Estado_Id" Type="Fechas_Estados_Pedido" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Pedidos" Member="Pedidos">
+    <Type Name="Pedido">
+      <Column Name="Pedido_Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Cliente_Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Enviar" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="TotalACobrar" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="AbonaCon" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Association Name="Pedido_Pedidos_Producto" Member="Pedidos_Productos" ThisKey="Pedido_Id" OtherKey="Pedido_Id" Type="Pedidos_Producto" />
+      <Association Name="Pedido_Fechas_Estados_Pedido" Member="Fechas_Estados_Pedidos" ThisKey="Pedido_Id" OtherKey="Pedido_Id" Type="Fechas_Estados_Pedido" />
+      <Association Name="Cliente_Pedido" Member="Cliente" ThisKey="Cliente_Id" OtherKey="Id" Type="Cliente" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Productos" Member="Productos">
+    <Type Name="Producto">
+      <Column Name="Prod_Cod" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Prod_Desc" Type="System.String" DbType="NChar(80)" CanBeNull="true" />
+      <Column Name="Prod_Precio" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Prod_Web" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Producto_Pedidos_Producto" Member="Pedidos_Productos" ThisKey="Prod_Cod" OtherKey="Producto_Cod" Type="Pedidos_Producto" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Pedidos_Productos" Member="Pedidos_Productos">
+    <Type Name="Pedidos_Producto">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Pedido_Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Producto_Cod" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Cantidad_Producto" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Pedido_Pedidos_Producto" Member="Pedido" ThisKey="Pedido_Id" OtherKey="Pedido_Id" Type="Pedido" IsForeignKey="true" />
+      <Association Name="Producto_Pedidos_Producto" Member="Producto" ThisKey="Producto_Cod" OtherKey="Prod_Cod" Type="Producto" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Fechas_Estados_Pedidos" Member="Fechas_Estados_Pedidos">
+    <Type Name="Fechas_Estados_Pedido">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Estado_Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Pedido_Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Fecha" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Estados_Pedido_Fechas_Estados_Pedido" Member="Estados_Pedido" ThisKey="Estado_Id" OtherKey="Estado_Id" Type="Estados_Pedido" IsForeignKey="true" />
+      <Association Name="Pedido_Fechas_Estados_Pedido" Member="Pedido" ThisKey="Pedido_Id" OtherKey="Pedido_Id" Type="Pedido" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
